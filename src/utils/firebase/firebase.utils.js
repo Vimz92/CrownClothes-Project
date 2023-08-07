@@ -1,65 +1,66 @@
+
+
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider,signInWithPopup, signInWithRedirect  } from 'firebase/auth';
-import { doc, getDoc, setDoc, getFirestore} from 'firebase/firestore';
+import {getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword} from 'firebase/auth';
+import {doc, getDoc, setDoc, getFirestore} from 'firebase/firestore'
+
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAQxB-_OIVCzrDHrdYCLM_KrGLB1cUu-BA",
-    authDomain: "crown-clothing-db-ddfe6.firebaseapp.com",
-    projectId: "crown-clothing-db-ddfe6",
-    storageBucket: "crown-clothing-db-ddfe6.appspot.com",
-    messagingSenderId: "374233758634",
-    appId: "1:374233758634:web:cdeb4863a8bcd019ccc9d3"
-  };
+  apiKey: "AIzaSyAQxB-_OIVCzrDHrdYCLM_KrGLB1cUu-BA",
+  authDomain: "crown-clothing-db-ddfe6.firebaseapp.com",
+  projectId: "crown-clothing-db-ddfe6",
+  storageBucket: "crown-clothing-db-ddfe6.appspot.com",
+  messagingSenderId: "374233758634",
+  appId: "1:374233758634:web:cdeb4863a8bcd019ccc9d3"
+};
 
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
+export const auth = getAuth();
 
 const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({
-    prompt: 'select_account',
+  prompt: 'select_account'
 })
 
-export const auth = getAuth();
-
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const GoogleSignInWithPopup = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
 
-export const createUserDocumentFromAuth = async(userAuth) => {
-    const userDocRef = doc(db, 'users', userAuth.uid)
-    console.log(userDocRef)
+export const GoogleUserInitial = async (StudAuth, additionalInformation = {}) => {
+if(!StudAuth) return;
 
-    const userSnapShot = await getDoc(userDocRef);
-    console.log(userSnapShot);
-    console.log(userSnapShot.exists());
-// if user data exists
+  const userRef = doc(db, 'mobile', StudAuth.uid)
 
+  const userSnapshot = await getDoc(userRef)
+  console.log(userSnapshot.exists())
 
-if(!userSnapShot.exists()){
-    const { displayName, email } = userAuth;
+  if(!userSnapshot.exists(StudAuth)) {
+    const {displayName ,email } = StudAuth
     const createdAt = new Date();
-
     try {
-      await setDoc(userDocRef, {
-        displayName,
-        email,
-        createdAt
-      })
+      await setDoc(userRef,{
+        displayName, 
+        email, 
+        createdAt,
+      ...additionalInformation}
+      )
     }
-    catch (error) {
-   console.log('error creating the user, error.message')
-    }
-//if user data does not exist, create / set the document with the data from userAuth in my collection
+    catch (err){
+   console.log(err, 'error')
+    }    
+  }
+  return userRef;
 }
 
-return userDocRef
+
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if(!email || !password) return;
+
+  return createUserWithEmailAndPassword(auth, email, password);
+
+
+ 
 }
-
-
-
-
-
-
 

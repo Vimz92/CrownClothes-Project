@@ -1,20 +1,22 @@
-import React, { Fragment } from 'react';
-import { signInWithGooglePopup, createUserDocumentFromAuth } from '../../utils/firebase/firebase.utils'
-
+import React from 'react'
+import {GoogleSignInWithPopup, GoogleUserInitial} from '../../utils/firebase/firebase.utils'
+import SignUpForm from '../../components/signup-form/signup-form'
 
 const SignIn = () => {
-  const logGoogleUser = async () => {
-    const {user} = await signInWithGooglePopup();
-    createUserDocumentFromAuth(user)
-    
-  }
   
+  const NewSign = async () => {
+    const {user}  = await GoogleSignInWithPopup();
+    console.log(user)
+    GoogleUserInitial(user);
+  }
+
   return (
-    <Fragment>
-   
-    <h1> This is signin page</h1>
-    <button onClick={logGoogleUser}> Sign in with Google Popup</button>
-    </Fragment>
+    <div>
+      <h1> Please login here </h1>
+      <button onClick={NewSign}> Sign in with Google Button  </button>
+
+      <SignUpForm />
+    </div>
   )
 }
 
