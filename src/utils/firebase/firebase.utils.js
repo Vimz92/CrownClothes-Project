@@ -1,7 +1,7 @@
 
 
 import { initializeApp } from "firebase/app";
-import {getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword} from 'firebase/auth';
+import {getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth';
 import {doc, getDoc, setDoc, getFirestore} from 'firebase/firestore'
 
 
@@ -36,7 +36,7 @@ if(!StudAuth) return;
   const userSnapshot = await getDoc(userRef)
   console.log(userSnapshot.exists())
 
-  if(!userSnapshot.exists(StudAuth)) {
+  if(!userSnapshot.exists()) {
     const {displayName ,email } = StudAuth
     const createdAt = new Date();
     try {
@@ -58,9 +58,13 @@ if(!StudAuth) return;
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
   if(!email || !password) return;
 
-  return createUserWithEmailAndPassword(auth, email, password);
-
-
- 
+  return await createUserWithEmailAndPassword(auth, email, password);
 }
 
+export const signInWithDefaultEmailAndPassword  = async (email, password) => {
+  if(!email || !password) return;
+
+  return await signInWithEmailAndPassword(auth, email, password);
+}
+
+export const signOutUser  = async () => await signOut(auth);
