@@ -73,18 +73,18 @@ const signInSubmit = async (e) => {
       <p> Sign in with your email and password </p>
       <form>
 
-        <label> Email  </label>
-        <input type='email' placeholder='email' name='email' value={email} onChange={signHandleChange}/>
+        
+        <input className='input-block' type='email' placeholder='Email' name='email' value={email} onChange={signHandleChange}/>
 
-        <label> Password </label>
-        <input type='password' placeholder='password' name='password' value={password} onChange={signHandleChange} />
+      
+        <input className='input-block' type='password' placeholder='Password' name='password' value={password} onChange={signHandleChange} />
 
    
       </form>
-      <div className='button-new-container'> 
-      <button  onClick={signInSubmit}> SIGN IN  </button>
-      <button  onClick={SignWithGoogle}> SIGN IN WITH GOOGLE  </button>
-      </div>
+          <div className='button-new-container'> 
+          <ButtonMain  buttonType='inverted' onClick={signInSubmit}> SIGN IN  </ButtonMain>
+          <ButtonMain  buttonType='google' onClick={SignWithGoogle}> Google Login  </ButtonMain>
+          </div>
       </div>
       <SignUpForm />
       
