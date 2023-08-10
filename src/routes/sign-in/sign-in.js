@@ -3,7 +3,6 @@ import {GoogleSignInWithPopup, GoogleUserInitial, signInWithDefaultEmailAndPassw
 import SignUpForm from '../../components/signup-form/signup-form'
 import ButtonMain from '../../components/button/button-main'
 import '../sign-in/signin.scss'
-import { UserContext } from '../../context/user.context'
 
 
 const defaultSignin = {
@@ -15,18 +14,15 @@ const defaultSignin = {
 const SignIn = () => {
   const[signField, setSignField] = useState(defaultSignin)
   const { email, password } = signField
- 
 
-  const { setCurrentUser } = useContext(UserContext)
 
   const resetField = () => {
     setSignField(defaultSignin)
   }
   
   const SignWithGoogle = async () => {
-    const {user}  = await GoogleSignInWithPopup();
-    console.log(user)
-    GoogleUserInitial(user);
+    await GoogleSignInWithPopup();
+
   }
 
 const signHandleChange = (e) => {
@@ -39,8 +35,6 @@ const signInSubmit = async (e) => {
   
   try {
      const {user} = await signInWithDefaultEmailAndPassword(email, password)
-     
-     setCurrentUser(user);
      resetField()
   }
   catch(err) {
